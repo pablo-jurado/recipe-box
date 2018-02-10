@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash'
 import { updateState } from './index'
 import './App.css';
 
@@ -13,7 +14,7 @@ function App (state) {
   );
 };
 function AllRecipes(state) {
-  var allRecipes = state.recipes.map(function(item) {
+  var allRecipes = _.map(state.recipes, function(item) {
     return singleRecipe(item);
   });
   return(
@@ -56,7 +57,7 @@ function singleRecipe(recipe) {
 };
 
 function Ingredients(state) {
-  var ingredientsArr = state.map(function(item, index) {
+  var ingredientsArr = _.map(state, function(item, index) {
     return (
       <li key={index}>{item}</li>
     );

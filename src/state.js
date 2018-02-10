@@ -1,8 +1,8 @@
 
 var appState = {
   text: "hello from state object",
-  recipes: [
-    {
+  recipes: {
+    Pasta: {
       active: null,
       name: "Pasta",
       description: "In large bowl, mix first 4 ingredients. Mix water and oil; add to flour mixture. Turn onto floured surface; knead for 2 minutes.",
@@ -17,7 +17,7 @@ var appState = {
                 "3 tablespoons grated parmesan cheese"
        ]
     },
-    {
+    Pizza: {
       name: "Pizza",
       description: "In large bowl, mix first 4 ingredients. Mix water and oil; add to flour mixture. Turn onto floured surface; knead for 2 minutes.",
       ingredients: [
@@ -27,7 +27,7 @@ var appState = {
                 "1⁄8 teaspoon pepper"
        ]
     }
-  ]
+  }
 };
 
 export default appState;
