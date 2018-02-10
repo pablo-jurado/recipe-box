@@ -25,42 +25,49 @@ function AllRecipes(state) {
 function singleRecipe(recipe) {
   var recipeHtml;
   if(!recipe.active) {
-    recipeHtml = <div onClick={updateState.bind(null, recipe, 'active')}>{recipe.name}</div>;
+    return closeRecipe(recipe);
   } else {
-    recipeHtml =
-      <div>
-        <button type="button"
-          className="btn btn-secondary float-right"
-          onClick={updateState.bind(null, recipe, 'close')}
-          >X
-        </button>
-        <h5 className="card-title">{recipe.name}</h5>
-        <p className="card-text">{recipe.description}</p>
-        <div>
-          <div><strong>Ingredients:</strong></div>
-          <div>{Ingredients(recipe.ingredients)}</div>
+    return openRecipe(recipe);
+  }
+
+};
+
+function openRecipe(recipe) {
+  return (
+    <div className="card" key={recipe.name}>
+        <div className="card-header"
+          onClick={updateState.bind(null, recipe, 'close')}>
+          {recipe.name}
         </div>
-        <div className="buttons-group float-right">
-          <button type="button" className="btn btn-primary">Edit</button>
-          <button type="button" className="btn btn-danger">Delete</button>
+        <div className="card-body">
+          <p className="card-text">{recipe.description}</p>
+          <div>
+            <div><strong>Ingredients:</strong></div>
+            {Ingredients(recipe.ingredients)}
+          </div>
+          <div className="buttons-group float-right">
+            <button type="button" className="btn btn-primary">Edit</button>
+            <button type="button" className="btn btn-danger">Delete</button>
+          </div>
         </div>
         <div className="clearfix"></div>
       </div>
-  }
+  );
+}
+
+function closeRecipe(recipe) {
   return (
-    <div key={recipe.name} className="card">
-      <div className="card-body">
-        {recipeHtml}
-      </div>
+    <div key={recipe.name}
+      className="list-group-item"
+      onClick={updateState.bind(null, recipe, 'active')}
+      >{recipe.name}
     </div>
   );
-};
+}
 
 function Ingredients(state) {
   var ingredientsArr = _.map(state, function(item, index) {
-    return (
-      <li key={index}>{item}</li>
-    );
+    return <li key={index}>{item}</li>
   });
 
   return(
