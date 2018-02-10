@@ -2,11 +2,10 @@
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import appState from './state'
-import _ from 'lodash'
+import appState from './state';
+import _ from 'lodash';
 import 'bootstrap/dist/css/bootstrap.css';
 import registerServiceWorker from './registerServiceWorker';
-
 
 // -------------------------------------------------
 // Update State
@@ -15,7 +14,7 @@ import registerServiceWorker from './registerServiceWorker';
 export function updateState(payload, action) {
   if (action === 'active') {
     _.forEach(appState.recipes, function(item) {
-      item.active = (item.name === payload.name) ? true : false;
+      item.active = (item.name === payload.name);
     });
   }
   if (action === 'close') {
@@ -29,7 +28,7 @@ export function updateState(payload, action) {
 // -------------------------------------------------
 // ReactDOM
 // -------------------------------------------------
-const root = document.getElementById("root");
+const root = document.getElementById('root');
 
 function render(state) {
   ReactDOM.render(
