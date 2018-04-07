@@ -9,19 +9,53 @@ function App (state) {
       <h2 className="jumbotron text-center">Recipe Box App</h2>
       <p className="text-center">Total Recipes: {state.recipes.length}</p>
       <br/>
+      {Editor(state)}
+      <br/>
       {AllRecipes(state)}
     </div>
   );
 };
+
+function Editor(state) {
+  if (state.editor) {
+    return (
+      <form>
+        <div>
+          <label>Name</label>
+          <input/>
+        </div>
+        <div>
+          <label>description</label>
+          <input/>
+        </div>
+        <div>
+          <label>ingredients</label>
+          <input/>
+        </div>
+        <button type="submit" className="btn btn-primary">Submit</button>
+        <button  className="btn btn-danger" onClick={updateState.bind(null, null, "close_editor")}>Cancel</button>
+
+      </form>
+    )
+  } else {
+    return (
+      <button className="btn btn-primary" 
+        onClick={updateState.bind(null, null, "open_editor")}>
+          New Recipe
+      </button>
+    );
+  }
+};
+
 function AllRecipes(state) {
   var allRecipes = _.map(state.recipes, function(item) {
-    return item.active ? openRecipe(item) : closeRecipe(item);
+    return item.active ? recipeOpened(item) : recipeClosed(item);
   });
 
   return allRecipes;
 };
 
-function openRecipe(recipe) {
+function recipeOpened(recipe) {
   return (
     <div className="card" key={recipe.name}>
       <div className="card-header"
@@ -43,7 +77,7 @@ function openRecipe(recipe) {
   );
 }
 
-function closeRecipe(recipe) {
+function recipeClosed(recipe) {
   return (
     <div key={recipe.name}
       className="list-group-item"

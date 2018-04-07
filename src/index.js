@@ -6,6 +6,7 @@ import appState from './state';
 import _ from 'lodash';
 import 'bootstrap/dist/css/bootstrap.css';
 import registerServiceWorker from './registerServiceWorker';
+import state from './state';
 
 // -------------------------------------------------
 // Update State
@@ -17,14 +18,24 @@ export function updateState(payload, action) {
       item.active = (item.name === payload.name);
     });
   }
+  
   if (action === 'close') {
     _.forEach(appState.recipes, function(item) {
       item.active = false;
     });
   }
 
+  if (action === 'open_editor') {
+    appState.editor = true;
+  }
+
+  if (action === 'close_editor') {
+    appState.editor = false;
+  }
+
   render(appState);
 };
+
 // -------------------------------------------------
 // ReactDOM
 // -------------------------------------------------
