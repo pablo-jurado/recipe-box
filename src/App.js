@@ -6,8 +6,9 @@ import './App.css';
 function App (state) {
   return (
     <div className="app">
-      <h2 className="jumbotron text-center">Recipe Box App</h2>
-      <div className="wrapper">      
+      <h2 className="jumbotron text-center link"
+        onClick={ () => updateState("close_editor") }>Recipe Box App</h2>
+      <div className="wrapper">
         {Editor(state.editor)}
         {AllRecipes(state)}
       </div>
@@ -35,7 +36,7 @@ function addIngredient(ingredient) {
 
 function saveRecipe(e) {
   e.preventDefault();
-  updateState("add_recipe");
+  updateState("save_recipe");
 }
 
 
@@ -47,7 +48,7 @@ function Editor(state) {
           <label htmlFor="recipe-name">Name</label>
           <input
             id="recipe-name"
-            className="form-control" 
+            className="form-control"
             type="text"
             required
             value={state.name}
@@ -56,8 +57,8 @@ function Editor(state) {
         <div className="form-group">
           <label htmlFor="recipe-description">Description</label>
           <input
-            id="recipe-description" 
-            className="form-control" 
+            id="recipe-description"
+            className="form-control"
             type="text"
             required
             value={state.description}
@@ -66,17 +67,17 @@ function Editor(state) {
         <div className="form-group">
           <label htmlFor="recipe-ingredients">Ingredients</label>
           <div className="input-group">
-            <input 
-              id="recipe-ingredients" 
+            <input
+              id="recipe-ingredients"
               className="form-control"
               type="text"
-              value={state.ingredient} 
+              value={state.ingredient}
               onChange={handleIngredient} />
               <span className="input-group-append">
-                <button 
-                  className="btn btn-outline-secondary" 
+                <button
+                  className="btn btn-outline-secondary"
                   type="button"
-                  onClick={addIngredient.bind(null, state.ingredient)}>
+                  onClick={ () => addIngredient(state.ingredient)}>
                   Add
                 </button>
               </span>
@@ -86,15 +87,15 @@ function Editor(state) {
           {Ingredients(state.ingredients)}
         </ul>
         <div className="buttons-group float-right">
-          <button className="btn btn-danger" type="button" onClick={updateState.bind(null, "close_editor")}>Cancel</button>
+          <button className="btn btn-danger" type="button" onClick={ () => updateState("close_editor")}>Cancel</button>
           <input className="btn btn-primary" type="submit" value="Save" />
         </div>
       </form>
     )
   } else {
     return (
-      <button className="btn btn-primary" 
-        onClick={updateState.bind(null, "open_editor")}>
+      <button className="btn btn-primary"
+        onClick={ () => updateState("open_editor")}>
           Add Recipe
       </button>
     );
@@ -104,23 +105,27 @@ function Editor(state) {
 function AllRecipes(state) {
   if (!state.editor.active) {
     var allRecipes = _.map(state.recipes, function(item) {
-      return item.active ? recipeOpened(item) : recipeClosed(item);
+        if (item.active) {
+          return RecipeOpened(item)
+        } else {
+          return RecipeClosed(item)
+        }
     });
 
     return (
       <div>
-        <p className="text-center">Total Recipes: {state.recipes.length}</p>
+        <p className="text-center">Total Recipes: {allRecipes.length}</p>
         {allRecipes}
       </div>
     )
   }
 };
 
-function recipeOpened(recipe) {
+function RecipeOpened(recipe) {
   return (
     <div className="card" key={recipe.id}>
       <div className="card-header"
-        onClick={updateState.bind(null, 'close', recipe)}>
+        onClick={ () => updateState('close', recipe)}>
         {recipe.name}
       </div>
       <div className="card-body">
@@ -130,19 +135,19 @@ function recipeOpened(recipe) {
           {Ingredients(recipe.ingredients)}
         </ul>
         <div className="buttons-group float-right">
-          <button type="button" className="btn btn-primary">Edit</button>
-          <button type="button" className="btn btn-danger">Delete</button>
+          <button onClick={ () => {  } } type="button" className="btn btn-primary">Edit</button>
+          <button onClick={ () => updateState("delete", recipe) } type="button" className="btn btn-danger">Delete</button>
         </div>
       </div>
     </div>
   );
 }
 
-function recipeClosed(recipe) {
+function RecipeClosed(recipe) {
   return (
     <div key={recipe.id}
       className="list-group-item"
-      onClick={updateState.bind(null, 'active', recipe)}>
+      onClick={ () => updateState('active', recipe)}>
       {recipe.name}
     </div>
   );

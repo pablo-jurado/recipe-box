@@ -7,6 +7,16 @@ import _ from 'lodash';
 import 'bootstrap/dist/css/bootstrap.css';
 import registerServiceWorker from './registerServiceWorker';
 
+
+function guid() {
+  function s4() {
+    return Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1);
+  }
+  return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+}
+
 // -------------------------------------------------
 // Update State
 // -------------------------------------------------
@@ -17,7 +27,7 @@ export function updateState(action, payload) {
       item.active = (item.id === payload.id);
     });
   }
-  
+
   if (action === 'close') {
     _.forEach(appState.recipes, function(item) {
       item.active = false;
@@ -57,26 +67,29 @@ export function updateState(action, payload) {
     appState.editor.ingredient = "";
   }
 
-  if (action === 'add_recipe') {
-    appState.editor.id = guid();
+  if (action === 'save_recipe') {
+    var id = guid();
+
     appState.editor.active = false;
-    appState.recipes.push(appState.editor);
+    appState.editor.id = id
+    appState.recipes[id] = appState.editor;
+
     updateState('close_editor');
+  }
+
+  if (action === 'edit_recipe') {
+    appState.editor = payload
+    updateState('open_editor');
+  }
+
+  if (action === 'delete' ) {
+    delete appState.recipes[payload.id];
   }
 
   localStorage.setItem("appState", JSON.stringify(appState));
 
   render(appState);
 };
-
-function guid() {
-  function s4() {
-    return Math.floor((1 + Math.random()) * 0x10000)
-      .toString(16)
-      .substring(1);
-  }
-  return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
-}
 
 // -------------------------------------------------
 // ReactDOM
