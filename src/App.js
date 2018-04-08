@@ -17,15 +17,15 @@ function App (state) {
 };
 
 function handleName(e) {
-  updateState("recipe_name", e.target.value);
+  updateState("update_name", e.target.value);
 }
 
 function handleDescription(e) {
-  updateState("recipe_description", e.target.value);
+  updateState("update_description", e.target.value);
 }
 
 function handleIngredients(e) {
-  updateState("recipe_ingredients", e.target.value);
+  updateState("update_ingredients", e.target.value);
 }
 
 function saveRecipe(e) {
@@ -111,7 +111,7 @@ function RecipeOpened(recipe) {
   return (
     <div className="card" key={recipe.id}>
       <div className="card-header"
-        onClick={ () => updateState('close', recipe)}>
+        onClick={ () => updateState('tab_close', recipe)}>
         {recipe.name}
       </div>
       <div className="card-body">
@@ -119,8 +119,8 @@ function RecipeOpened(recipe) {
         <p><strong>Ingredients:</strong></p>
         <ul>{ ingredients }</ul>
         <div className="buttons-group float-right">
-          <button onClick={ () => updateState("edit_recipe", recipe) } type="button" className="btn btn-primary">Edit</button>
-          <button onClick={ () => updateState("delete", recipe) } type="button" className="btn btn-danger">Delete</button>
+          <button onClick={ () => updateState("edit_recipe", recipe) } type="button" className="btn btn-outline-primary">Edit</button>
+          <button onClick={ () => updateState("delete_recipe", recipe) } type="button" className="btn btn-outline-danger">Delete</button>
         </div>
       </div>
     </div>
@@ -131,7 +131,7 @@ function RecipeClosed(recipe) {
   return (
     <div key={recipe.id}
       className="list-group-item"
-      onClick={ () => updateState('active', recipe)}>
+      onClick={ () => updateState('tab_active', recipe)}>
       {recipe.name}
     </div>
   );

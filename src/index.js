@@ -22,13 +22,13 @@ function guid() {
 // -------------------------------------------------
 
 export function updateState(action, payload) {
-  if (action === 'active') {
+  if (action === 'tab_active') {
     _.forEach(appState.recipes, function(item) {
       item.active = (item.id === payload.id);
     });
   }
 
-  if (action === 'close') {
+  if (action === 'tab_close') {
     _.forEach(appState.recipes, function(item) {
       item.active = false;
     });
@@ -48,21 +48,20 @@ export function updateState(action, payload) {
     }
   }
 
-  if (action === 'recipe_name') {
+  if (action === 'update_name') {
     appState.editor.name = payload;
   }
 
-  if (action === 'recipe_description') {
+  if (action === 'update_description') {
     appState.editor.description = payload;
   }
 
-  if (action === 'recipe_ingredients') {
+  if (action === 'update_ingredients') {
     appState.editor.ingredients = payload;
   }
 
   if (action === 'save_recipe') {
     appState.editor.active = false;
-
     // update if already exist
     if (appState.editor.id in appState.recipes) {
       appState.recipes[appState.editor.id] = appState.editor;
@@ -72,11 +71,10 @@ export function updateState(action, payload) {
       appState.editor.id = id
       appState.recipes[id] = appState.editor;
     }
-
     updateState('close_editor');
   }
 
-  if (action === 'delete' ) {
+  if (action === 'delete_recipe' ) {
     delete appState.recipes[payload.id];
   }
 
