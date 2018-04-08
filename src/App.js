@@ -27,15 +27,26 @@ function handleIngredient(e) {
   updateState("recipe_ingredient", e.target.value);
 }
 
+function addIngredient() {
+  updateState("add_ingredient");
+}
+
+function saveRecipe(e) {
+  e.preventDefault();
+  updateState("add_recipe");
+}
+
+
 function Editor(state) {
   if (state.active) {
     return (
-      <form className="recipe-form">
+      <form className="recipe-form" onSubmit={saveRecipe}>
         <div className="form-group">
           <label htmlFor="recipe-name">Name</label>
           <input
             id="recipe-name" 
             className="form-control" 
+            type="text"
             value={state.name}
             onChange={handleName} />
         </div>
@@ -44,23 +55,35 @@ function Editor(state) {
           <input
             id="recipe-description" 
             className="form-control" 
+            type="text"
             value={state.description}
             onChange={handleDescription} />
         </div>
         <div className="form-group">
           <label htmlFor="recipe-ingredients">Ingredients</label>
-          <input 
-            id="recipe-ingredients" 
-            className="form-control" 
-            value={state.ingredient} 
-            onChange={handleIngredient} />
+          <div className="input-group">
+            <input 
+              id="recipe-ingredients" 
+              className="form-control"
+              type="text"
+              value={state.ingredient} 
+              onChange={handleIngredient} />
+              <span className="input-group-append">
+                <button 
+                  className="btn btn-outline-secondary" 
+                  type="button"
+                  onClick={addIngredient}>
+                  Add
+                </button>
+              </span>
+            </div>
         </div>
         <ul>
-          {Ingredients(state.allIngredients)}
+          {Ingredients(state.ingredients)}
         </ul>
         <div className="buttons-group float-right">
-          <button className="btn btn-primary">Save</button>
-          <button className="btn btn-danger" onClick={updateState.bind(null, "close_editor")}>Cancel</button>
+          <button className="btn btn-danger" type="button" onClick={updateState.bind(null, "close_editor")}>Cancel</button>
+          <input className="btn btn-primary" type="submit" value="Save" />
         </div>
       </form>
     )
@@ -68,7 +91,7 @@ function Editor(state) {
     return (
       <button className="btn btn-primary" 
         onClick={updateState.bind(null, "open_editor")}>
-          New Recipe
+          Add Recipe
       </button>
     );
   }

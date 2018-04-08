@@ -5,7 +5,7 @@ var appState = {
     name: "",
     description: "",
     ingredient: "",
-    allIngredients: []
+    ingredients: []
   },
   recipes: [
     {

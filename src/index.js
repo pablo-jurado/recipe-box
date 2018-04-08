@@ -6,7 +6,6 @@ import appState from './state';
 import _ from 'lodash';
 import 'bootstrap/dist/css/bootstrap.css';
 import registerServiceWorker from './registerServiceWorker';
-import state from './state';
 
 // -------------------------------------------------
 // Update State
@@ -49,6 +48,18 @@ export function updateState(action, payload) {
 
   if (action === 'recipe_ingredient') {
     appState.editor.ingredient = payload;
+  }
+
+  if (action === 'add_ingredient') {
+    var item = appState.editor.ingredient;
+    appState.editor.ingredients.push(item);
+    appState.editor.ingredient = "";
+  }
+
+  if (action === 'add_recipe') {
+    appState.editor.active = false;
+    appState.recipes.push(appState.editor);
+    updateState('close_editor');
   }
 
   render(appState);
