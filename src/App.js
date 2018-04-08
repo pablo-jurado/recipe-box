@@ -27,8 +27,10 @@ function handleIngredient(e) {
   updateState("recipe_ingredient", e.target.value);
 }
 
-function addIngredient() {
-  updateState("add_ingredient");
+function addIngredient(ingredient) {
+  if (ingredient !== "") {
+    updateState("add_ingredient");
+  }
 }
 
 function saveRecipe(e) {
@@ -44,9 +46,10 @@ function Editor(state) {
         <div className="form-group">
           <label htmlFor="recipe-name">Name</label>
           <input
-            id="recipe-name" 
+            id="recipe-name"
             className="form-control" 
             type="text"
+            required
             value={state.name}
             onChange={handleName} />
         </div>
@@ -56,6 +59,7 @@ function Editor(state) {
             id="recipe-description" 
             className="form-control" 
             type="text"
+            required
             value={state.description}
             onChange={handleDescription} />
         </div>
@@ -72,7 +76,7 @@ function Editor(state) {
                 <button 
                   className="btn btn-outline-secondary" 
                   type="button"
-                  onClick={addIngredient}>
+                  onClick={addIngredient.bind(null, state.ingredient)}>
                   Add
                 </button>
               </span>
@@ -114,7 +118,7 @@ function AllRecipes(state) {
 
 function recipeOpened(recipe) {
   return (
-    <div className="card" key={recipe.name}>
+    <div className="card" key={recipe.id}>
       <div className="card-header"
         onClick={updateState.bind(null, 'close', recipe)}>
         {recipe.name}
@@ -136,7 +140,7 @@ function recipeOpened(recipe) {
 
 function recipeClosed(recipe) {
   return (
-    <div key={recipe.name}
+    <div key={recipe.id}
       className="list-group-item"
       onClick={updateState.bind(null, 'active', recipe)}>
       {recipe.name}

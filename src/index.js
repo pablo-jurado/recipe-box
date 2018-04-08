@@ -14,7 +14,7 @@ import registerServiceWorker from './registerServiceWorker';
 export function updateState(action, payload) {
   if (action === 'active') {
     _.forEach(appState.recipes, function(item) {
-      item.active = (item.name === payload.name);
+      item.active = (item.id === payload.id);
     });
   }
   
@@ -30,11 +30,12 @@ export function updateState(action, payload) {
 
   if (action === 'close_editor') {
     appState.editor = {
+      id: null,
       active: false,
       name: "",
       description: "",
       ingredient: "",
-      allIngredients: []
+      ingredients: []
     }
   }
 
@@ -57,6 +58,7 @@ export function updateState(action, payload) {
   }
 
   if (action === 'add_recipe') {
+    appState.editor.id = guid();
     appState.editor.active = false;
     appState.recipes.push(appState.editor);
     updateState('close_editor');
@@ -64,6 +66,15 @@ export function updateState(action, payload) {
 
   render(appState);
 };
+
+function guid() {
+  function s4() {
+    return Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1);
+  }
+  return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+}
 
 // -------------------------------------------------
 // ReactDOM

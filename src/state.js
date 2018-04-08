@@ -1,6 +1,7 @@
 
 var appState = {
   editor: {
+    id: null,
     active: false,
     name: "",
     description: "",
@@ -9,6 +10,7 @@ var appState = {
   },
   recipes: [
     {
+      id: 1,
       active: null,
       name: 'Pasta',
       description: 'In large bowl, mix first 4 ingredients. Mix water and oil; add to flour mixture. Turn onto floured surface; knead for 2 minutes.',
@@ -24,6 +26,7 @@ var appState = {
       ]
     },
     {
+      id: 2,
       active: null,
       name: 'Pizza',
       description: 'In large bowl, mix first 4 ingredients. Mix water and oil; add to flour mixture. Turn onto floured surface; knead for 2 minutes.',
