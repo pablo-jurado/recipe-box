@@ -24,14 +24,8 @@ function handleDescription(e) {
   updateState("recipe_description", e.target.value);
 }
 
-function handleIngredient(e) {
-  updateState("recipe_ingredient", e.target.value);
-}
-
-function addIngredient(ingredient) {
-  if (ingredient !== "") {
-    updateState("add_ingredient");
-  }
+function handleIngredients(e) {
+  updateState("recipe_ingredients", e.target.value);
 }
 
 function saveRecipe(e) {
@@ -71,23 +65,13 @@ function Editor(state) {
               id="recipe-ingredients"
               className="form-control"
               type="text"
-              value={state.ingredient}
-              onChange={handleIngredient} />
-              <span className="input-group-append">
-                <button
-                  className="btn btn-outline-secondary"
-                  type="button"
-                  onClick={ () => addIngredient(state.ingredient)}>
-                  Add
-                </button>
-              </span>
+              required
+              value={state.ingredients}
+              onChange={handleIngredients} />
             </div>
         </div>
-        <ul>
-          {Ingredients(state.ingredients)}
-        </ul>
         <div className="buttons-group float-right">
-          <button className="btn btn-danger" type="button" onClick={ () => updateState("close_editor")}>Cancel</button>
+          <button className="btn btn-danger" type="button" onClick={ () => updateState("close_editor") }>Cancel</button>
           <input className="btn btn-primary" type="submit" value="Save" />
         </div>
       </form>
@@ -95,7 +79,7 @@ function Editor(state) {
   } else {
     return (
       <button className="btn btn-primary"
-        onClick={ () => updateState("open_editor")}>
+        onClick={ () => updateState("open_editor") }>
           Add Recipe
       </button>
     );
@@ -122,6 +106,8 @@ function AllRecipes(state) {
 };
 
 function RecipeOpened(recipe) {
+  var ingredientsArr = recipe.ingredients.trim().split(",").filter(item => item !== "");
+  var ingredients = ingredientsArr.map((item, idx) => <li key={idx}> { item }</li>);
   return (
     <div className="card" key={recipe.id}>
       <div className="card-header"
@@ -131,11 +117,9 @@ function RecipeOpened(recipe) {
       <div className="card-body">
         <p className="card-text">{recipe.description}</p>
         <p><strong>Ingredients:</strong></p>
-        <ul>
-          {Ingredients(recipe.ingredients)}
-        </ul>
+        <ul>{ ingredients }</ul>
         <div className="buttons-group float-right">
-          <button onClick={ () => {  } } type="button" className="btn btn-primary">Edit</button>
+          <button onClick={ () => updateState("edit_recipe", recipe) } type="button" className="btn btn-primary">Edit</button>
           <button onClick={ () => updateState("delete", recipe) } type="button" className="btn btn-danger">Delete</button>
         </div>
       </div>
@@ -151,14 +135,6 @@ function RecipeClosed(recipe) {
       {recipe.name}
     </div>
   );
-}
-
-function Ingredients(state) {
-  var ingredientsArr = _.map(state, function(item, index) {
-    return <li key={index + item}>{item}</li>;
-  });
-
-  return ingredientsArr;
 }
 
 export default App;

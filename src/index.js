@@ -44,8 +44,7 @@ export function updateState(action, payload) {
       active: false,
       name: "",
       description: "",
-      ingredient: "",
-      ingredients: []
+      ingredients: ""
     }
   }
 
@@ -57,33 +56,33 @@ export function updateState(action, payload) {
     appState.editor.description = payload;
   }
 
-  if (action === 'recipe_ingredient') {
-    appState.editor.ingredient = payload;
-  }
-
-  if (action === 'add_ingredient') {
-    var item = appState.editor.ingredient;
-    appState.editor.ingredients.push(item);
-    appState.editor.ingredient = "";
+  if (action === 'recipe_ingredients') {
+    appState.editor.ingredients = payload;
   }
 
   if (action === 'save_recipe') {
-    var id = guid();
-
     appState.editor.active = false;
-    appState.editor.id = id
-    appState.recipes[id] = appState.editor;
+
+    // update if already exist
+    if (appState.editor.id in appState.recipes) {
+      appState.recipes[appState.editor.id] = appState.editor;
+    } else {
+      // if does not exist will create a new one
+      var id = guid();
+      appState.editor.id = id
+      appState.recipes[id] = appState.editor;
+    }
 
     updateState('close_editor');
   }
 
-  if (action === 'edit_recipe') {
-    appState.editor = payload
-    updateState('open_editor');
-  }
-
   if (action === 'delete' ) {
     delete appState.recipes[payload.id];
+  }
+
+  if (action === 'edit_recipe') {
+    appState.editor = _.cloneDeep(payload);
+    appState.editor.active = true;
   }
 
   localStorage.setItem("appState", JSON.stringify(appState));

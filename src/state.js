@@ -8,8 +8,7 @@ if (!appState) {
       active: false,
       name: "",
       description: "",
-      ingredient: "",
-      ingredients: []
+      ingredients: "",
     },
     recipes: {}
   };
