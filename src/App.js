@@ -7,40 +7,67 @@ function App (state) {
   return (
     <div className="app">
       <h2 className="jumbotron text-center">Recipe Box App</h2>
-      <p className="text-center">Total Recipes: {state.recipes.length}</p>
-      <br/>
-      {Editor(state)}
-      <br/>
-      {AllRecipes(state)}
+      <div className="wrapper">      
+        {Editor(state.editor)}
+        {AllRecipes(state)}
+      </div>
     </div>
   );
 };
 
-function Editor(state) {
-  if (state.editor) {
-    return (
-      <form>
-        <div>
-          <label>Name</label>
-          <input/>
-        </div>
-        <div>
-          <label>description</label>
-          <input/>
-        </div>
-        <div>
-          <label>ingredients</label>
-          <input/>
-        </div>
-        <button type="submit" className="btn btn-primary">Submit</button>
-        <button  className="btn btn-danger" onClick={updateState.bind(null, null, "close_editor")}>Cancel</button>
+function handleName(e) {
+  updateState("recipe_name", e.target.value);
+}
 
+function handleDescription(e) {
+  updateState("recipe_description", e.target.value);
+}
+
+function handleIngredient(e) {
+  updateState("recipe_ingredient", e.target.value);
+}
+
+function Editor(state) {
+  if (state.active) {
+    return (
+      <form className="recipe-form">
+        <div className="form-group">
+          <label htmlFor="recipe-name">Name</label>
+          <input
+            id="recipe-name" 
+            className="form-control" 
+            value={state.name}
+            onChange={handleName} />
+        </div>
+        <div className="form-group">
+          <label htmlFor="recipe-description">Description</label>
+          <input
+            id="recipe-description" 
+            className="form-control" 
+            value={state.description}
+            onChange={handleDescription} />
+        </div>
+        <div className="form-group">
+          <label htmlFor="recipe-ingredients">Ingredients</label>
+          <input 
+            id="recipe-ingredients" 
+            className="form-control" 
+            value={state.ingredient} 
+            onChange={handleIngredient} />
+        </div>
+        <ul>
+          {Ingredients(state.allIngredients)}
+        </ul>
+        <div className="buttons-group float-right">
+          <button className="btn btn-primary">Save</button>
+          <button className="btn btn-danger" onClick={updateState.bind(null, "close_editor")}>Cancel</button>
+        </div>
       </form>
     )
   } else {
     return (
       <button className="btn btn-primary" 
-        onClick={updateState.bind(null, null, "open_editor")}>
+        onClick={updateState.bind(null, "open_editor")}>
           New Recipe
       </button>
     );
@@ -48,18 +75,25 @@ function Editor(state) {
 };
 
 function AllRecipes(state) {
-  var allRecipes = _.map(state.recipes, function(item) {
-    return item.active ? recipeOpened(item) : recipeClosed(item);
-  });
+  if (!state.editor.active) {
+    var allRecipes = _.map(state.recipes, function(item) {
+      return item.active ? recipeOpened(item) : recipeClosed(item);
+    });
 
-  return allRecipes;
+    return (
+      <div>
+        <p className="text-center">Total Recipes: {state.recipes.length}</p>
+        {allRecipes}
+      </div>
+    )
+  }
 };
 
 function recipeOpened(recipe) {
   return (
     <div className="card" key={recipe.name}>
       <div className="card-header"
-        onClick={updateState.bind(null, recipe, 'close')}>
+        onClick={updateState.bind(null, 'close', recipe)}>
         {recipe.name}
       </div>
       <div className="card-body">
@@ -81,7 +115,7 @@ function recipeClosed(recipe) {
   return (
     <div key={recipe.name}
       className="list-group-item"
-      onClick={updateState.bind(null, recipe, 'active')}>
+      onClick={updateState.bind(null, 'active', recipe)}>
       {recipe.name}
     </div>
   );

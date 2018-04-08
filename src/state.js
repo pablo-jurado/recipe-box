@@ -1,6 +1,12 @@
 
 var appState = {
-  editor: false,
+  editor: {
+    active: false,
+    name: "",
+    description: "",
+    ingredient: "",
+    allIngredients: []
+  },
   recipes: [
     {
       active: null,
