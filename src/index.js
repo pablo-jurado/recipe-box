@@ -64,6 +64,8 @@ export function updateState(action, payload) {
     updateState('close_editor');
   }
 
+  localStorage.setItem("appState", JSON.stringify(appState));
+
   render(appState);
 };
 
