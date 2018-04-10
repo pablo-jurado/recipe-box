@@ -3,6 +3,8 @@ import _ from 'lodash';
 import { updateState } from './index';
 import './App.css';
 
+
+// TODO: move appstate to this component
 function App (state) {
   return (
     <div className="app">
@@ -33,7 +35,7 @@ function saveRecipe(e) {
   updateState("save_recipe");
 }
 
-
+// TODO: add internal state to the form
 function Editor(state) {
   if (state.active) {
     return (
