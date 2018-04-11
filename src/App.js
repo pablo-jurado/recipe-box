@@ -11,65 +11,73 @@ function App (state) {
       <h2 className="jumbotron text-center link"
         onClick={ () => updateState("close_editor") }>Recipe Box App</h2>
       <div className="wrapper">
-        {Editor(state.editor)}
-        {AllRecipes(state)}
+        <ButtonEditor />
+        <Editor />
+        {/* {AllRecipes(state)} */}
       </div>
     </div>
   );
 };
 
-function handleName(e) {
-  updateState("update_name", e.target.value);
-}
-
-function handleDescription(e) {
-  updateState("update_description", e.target.value);
-}
-
-function handleIngredients(e) {
-  updateState("update_ingredients", e.target.value);
-}
-
-function saveRecipe(e) {
-  e.preventDefault();
-  updateState("save_recipe");
-}
 
 // TODO: add internal state to the form
-function Editor(state) {
-  if (state.active) {
+class Editor extends React.Component {
+  constructor() {
+    super();
+
+    this.state = {
+      "name": "",
+      "description": "",
+      "ingredients": "",
+    };
+
+    this.handleInput = this.handleInput.bind(this);
+    this.saveRecipe = this.saveRecipe.bind(this);
+
+  }
+
+  handleInput(e) {
+    this.setState({ [e.target.id]: e.target.value });
+  }
+  
+  saveRecipe(e) {
+    e.preventDefault();
+    console.log(this.state);
+  }
+
+  render() {
     return (
-      <form className="recipe-form" onSubmit={saveRecipe}>
+      <form className="recipe-form" onSubmit={this.saveRecipe}>
         <div className="form-group">
           <label htmlFor="recipe-name">Name</label>
           <input
-            id="recipe-name"
+            id="name"
             className="form-control"
             type="text"
             required
-            value={state.name}
-            onChange={handleName} />
+            value={this.state.name}
+            onChange={this.handleInput} />
         </div>
         <div className="form-group">
           <label htmlFor="recipe-description">Description</label>
           <input
-            id="recipe-description"
+            id="description"
             className="form-control"
             type="text"
             required
-            value={state.description}
-            onChange={handleDescription} />
+            value={this.state.description}
+            onChange={this.handleInput} />
         </div>
         <div className="form-group">
           <label htmlFor="recipe-ingredients">Ingredients</label>
           <div className="input-group">
             <input
-              id="recipe-ingredients"
+              id="ingredients"
               className="form-control"
               type="text"
               required
-              value={state.ingredients}
-              onChange={handleIngredients} />
+              value={this.state.ingredients}
+              onChange={this.handleInput} />
             </div>
         </div>
         <div className="buttons-group float-right">
@@ -78,15 +86,17 @@ function Editor(state) {
         </div>
       </form>
     )
-  } else {
-    return (
-      <button className="btn btn-primary"
-        onClick={ () => updateState("open_editor") }>
-          Add Recipe
-      </button>
-    );
-  }
+  }  
 };
+
+function ButtonEditor() {
+  return (
+    <button className="btn btn-primary"
+      onClick={ () => updateState("open_editor") }>
+        Add Recipe
+    </button>
+  );
+}
 
 function AllRecipes(state) {
   if (!state.editor.active) {
