@@ -1,26 +1,43 @@
 import React from 'react';
 import _ from 'lodash';
-import { updateState } from './index';
 import './App.css';
 
 
-// TODO: move appstate to this component
-function App (state) {
-  return (
-    <div className="app">
-      <h2 className="jumbotron text-center link"
-        onClick={ () => updateState("close_editor") }>Recipe Box App</h2>
-      <div className="wrapper">
-        <ButtonEditor />
-        <Editor />
-        {/* {AllRecipes(state)} */}
+class App extends React.Component {
+  constructor() {
+    super();
+
+    this.state = {
+      editor: false
+    };
+
+    this.toggleEditor = this.toggleEditor.bind(this);
+  }
+
+  toggleEditor() {
+    this.setState({ editor: !this.state.editor });  
+  }
+
+  render() {
+    var element = null;
+    if (!this.state.editor) {
+      element = <ButtonEditor toggle={this.toggleEditor} />;
+    } else {
+      element = <Editor />;
+    }
+    return (
+      <div className="app">
+        <h2 className="jumbotron text-center link"
+          onClick={ () => { } }>Recipe Box App</h2>
+        <div className="wrapper">
+          { element }
+          {/* {AllRecipes(state)} */}
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
 };
 
-
-// TODO: add internal state to the form
 class Editor extends React.Component {
   constructor() {
     super();
@@ -46,6 +63,7 @@ class Editor extends React.Component {
   }
 
   render() {
+    // TODO: maybe move if and button here
     return (
       <form className="recipe-form" onSubmit={this.saveRecipe}>
         <div className="form-group">
@@ -81,7 +99,7 @@ class Editor extends React.Component {
             </div>
         </div>
         <div className="buttons-group float-right">
-          <button className="btn btn-danger" type="button" onClick={ () => updateState("close_editor") }>Cancel</button>
+          <button className="btn btn-danger" type="button" onClick={ () => {} }>Cancel</button>
           <input className="btn btn-primary" type="submit" value="Save" />
         </div>
       </form>
@@ -89,10 +107,10 @@ class Editor extends React.Component {
   }  
 };
 
-function ButtonEditor() {
+function ButtonEditor(props) {
   return (
     <button className="btn btn-primary"
-      onClick={ () => updateState("open_editor") }>
+      onClick={ props.toggle() }>
         Add Recipe
     </button>
   );
@@ -123,7 +141,7 @@ function RecipeOpened(recipe) {
   return (
     <div className="card" key={recipe.id}>
       <div className="card-header"
-        onClick={ () => updateState('tab_close', recipe)}>
+        onClick={ () => { } }>
         {recipe.name}
       </div>
       <div className="card-body">
@@ -131,8 +149,8 @@ function RecipeOpened(recipe) {
         <p><strong>Ingredients:</strong></p>
         <ul>{ ingredients }</ul>
         <div className="buttons-group float-right">
-          <button onClick={ () => updateState("edit_recipe", recipe) } type="button" className="btn btn-outline-primary">Edit</button>
-          <button onClick={ () => updateState("delete_recipe", recipe) } type="button" className="btn btn-outline-danger">Delete</button>
+          <button onClick={ () => { } } type="button" className="btn btn-outline-primary">Edit</button>
+          <button onClick={ () => { } } type="button" className="btn btn-outline-danger">Delete</button>
         </div>
       </div>
     </div>
@@ -143,7 +161,7 @@ function RecipeClosed(recipe) {
   return (
     <div key={recipe.id}
       className="list-group-item"
-      onClick={ () => updateState('tab_active', recipe)}>
+      onClick={ () => { } }>
       {recipe.name}
     </div>
   );
