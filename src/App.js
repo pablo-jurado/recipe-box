@@ -19,18 +19,13 @@ class App extends React.Component {
   }
 
   render() {
-    var element = null;
-    if (!this.state.editor) {
-      element = <ButtonEditor toggle={this.toggleEditor} />;
-    } else {
-      element = <Editor />;
-    }
+    console.log("render", this.state);
     return (
       <div className="app">
         <h2 className="jumbotron text-center link"
           onClick={ () => { } }>Recipe Box App</h2>
         <div className="wrapper">
-          { element }
+          <Editor editor={ this.state.editor } toggle={ this.toggleEditor } />
           {/* {AllRecipes(state)} */}
         </div>
       </div>
@@ -39,8 +34,8 @@ class App extends React.Component {
 };
 
 class Editor extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
       "name": "",
@@ -50,7 +45,6 @@ class Editor extends React.Component {
 
     this.handleInput = this.handleInput.bind(this);
     this.saveRecipe = this.saveRecipe.bind(this);
-
   }
 
   handleInput(e) {
@@ -63,54 +57,57 @@ class Editor extends React.Component {
   }
 
   render() {
-    // TODO: maybe move if and button here
-    return (
-      <form className="recipe-form" onSubmit={this.saveRecipe}>
-        <div className="form-group">
-          <label htmlFor="recipe-name">Name</label>
-          <input
-            id="name"
-            className="form-control"
-            type="text"
-            required
-            value={this.state.name}
-            onChange={this.handleInput} />
-        </div>
-        <div className="form-group">
-          <label htmlFor="recipe-description">Description</label>
-          <input
-            id="description"
-            className="form-control"
-            type="text"
-            required
-            value={this.state.description}
-            onChange={this.handleInput} />
-        </div>
-        <div className="form-group">
-          <label htmlFor="recipe-ingredients">Ingredients</label>
-          <div className="input-group">
+    if (!this.props.editor) {
+      return <ButtonEditor toggle={ this.props.toggle } />
+    } else {
+      return (
+        <form className="recipe-form" onSubmit={ this.saveRecipe }>
+          <div className="form-group">
+            <label htmlFor="recipe-name">Name</label>
             <input
-              id="ingredients"
+              id="name"
               className="form-control"
               type="text"
               required
-              value={this.state.ingredients}
+              value={this.state.name}
               onChange={this.handleInput} />
-            </div>
-        </div>
-        <div className="buttons-group float-right">
-          <button className="btn btn-danger" type="button" onClick={ () => {} }>Cancel</button>
-          <input className="btn btn-primary" type="submit" value="Save" />
-        </div>
-      </form>
-    )
+          </div>
+          <div className="form-group">
+            <label htmlFor="recipe-description">Description</label>
+            <input
+              id="description"
+              className="form-control"
+              type="text"
+              required
+              value={this.state.description}
+              onChange={this.handleInput} />
+          </div>
+          <div className="form-group">
+            <label htmlFor="recipe-ingredients">Ingredients</label>
+            <div className="input-group">
+              <input
+                id="ingredients"
+                className="form-control"
+                type="text"
+                required
+                value={this.state.ingredients}
+                onChange={this.handleInput} />
+              </div>
+          </div>
+          <div className="buttons-group float-right">
+            <button className="btn btn-danger" type="button" onClick={ this.props.toggle }>Cancel</button>
+            <input className="btn btn-primary" type="submit" value="Save" />
+          </div>
+        </form>
+      )
+    }
   }  
 };
 
 function ButtonEditor(props) {
   return (
     <button className="btn btn-primary"
-      onClick={ props.toggle() }>
+      onClick={ props.toggle }>
         Add Recipe
     </button>
   );
