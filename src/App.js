@@ -22,6 +22,7 @@ class App extends React.Component {
 
     this.toggleEditor = this.toggleEditor.bind(this);
     this.addRecipe = this.addRecipe.bind(this);
+    this.toggleRecipe = this.toggleRecipe.bind(this);
   }
 
   toggleEditor() {
@@ -32,21 +33,22 @@ class App extends React.Component {
     var newRecipes = this.state.recipes;
     newRecipes[recipe.id] = recipe;
     this.setState( { recipes: newRecipes } );
-
-    console.log(this.state);
-
   }
 
+  toggleRecipe(id) {
+    var newRecipes = this.state.recipes;
+    newRecipes[id].active = !newRecipes[id].active;
+    this.setState({ recipes: newRecipes });  
+  }
 
   render() {
-    console.log("render", this.state);
     return (
       <div className="app">
         <h2 className="jumbotron text-center link"
           onClick={ () => { } }>Recipe Box App</h2>
         <div className="wrapper">
           <Editor editor={ this.state.editor } toggle={ this.toggleEditor } submit={ this.addRecipe } />
-          <AllRecipes editor={ this.state.editor } recipes={ this.state.recipes } />
+          <AllRecipes editor={ this.state.editor } recipes={ this.state.recipes } toggle={ this.toggleRecipe } />
         </div>
       </div>
     );
@@ -76,6 +78,13 @@ class Editor extends React.Component {
   saveRecipe(e) {
     e.preventDefault();
     this.props.submit(this.state);
+    this.setState({
+        name: "",
+        description: "",
+        ingredients: "",
+        id: guid(),
+        active: false
+    });
     this.props.toggle();
   }
 
@@ -143,9 +152,9 @@ function AllRecipes(props) {
 
   var allRecipes = _.map(props.recipes, function(item) {
       if (item.active) {
-        return RecipeOpened(item)
+        return RecipeOpened(item, props.toggle)
       } else {
-        return RecipeClosed(item)
+        return RecipeClosed(item, props.toggle)
       }
   });
 
@@ -157,13 +166,13 @@ function AllRecipes(props) {
   )
 };
 
-function RecipeOpened(recipe) {
+function RecipeOpened(recipe, toggle) {
   var ingredientsArr = recipe.ingredients.trim().split(",").filter(item => item !== "");
   var ingredients = ingredientsArr.map((item, idx) => <li key={idx}> { item }</li>);
   return (
     <div className="card" key={recipe.id}>
       <div className="card-header"
-        onClick={ () => { } }>
+        onClick={ () => toggle(recipe.id) }>
         {recipe.name}
       </div>
       <div className="card-body">
@@ -179,11 +188,11 @@ function RecipeOpened(recipe) {
   );
 }
 
-function RecipeClosed(recipe) {
+function RecipeClosed(recipe, toggle) {
   return (
     <div key={recipe.id}
       className="list-group-item"
-      onClick={ () => { } }>
+      onClick={ () => toggle(recipe.id) }>
       {recipe.name}
     </div>
   );
