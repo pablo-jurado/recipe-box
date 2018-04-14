@@ -15,10 +15,17 @@ class App extends React.Component {
   constructor() {
     super();
 
-    this.state = {
-      editor: false,
-      recipes: {}
-    };
+    var appState = JSON.parse(localStorage.getItem("appState"));
+    
+    if (appState) {
+      this.state = appState;
+    } else {
+      this.state = {
+        editor: false,
+        recipes: {}
+      };
+      localStorage.setItem("appState", JSON.stringify(this.state));
+    }
 
     this.toggleEditor = this.toggleEditor.bind(this);
     this.addRecipe = this.addRecipe.bind(this);
@@ -30,9 +37,12 @@ class App extends React.Component {
   }
 
   addRecipe(recipe) {
-    var newRecipes = this.state.recipes;
-    newRecipes[recipe.id] = recipe;
-    this.setState( { recipes: newRecipes } );
+    var newState = this.state;
+    newState.editor = false;
+    newState.recipes[recipe.id] = recipe;
+    this.setState( newState );
+
+    localStorage.setItem("appState", JSON.stringify(this.state));
   }
 
   toggleRecipe(id) {
@@ -78,14 +88,17 @@ class Editor extends React.Component {
   saveRecipe(e) {
     e.preventDefault();
     this.props.submit(this.state);
+    this.resetForm();
+  }
+
+  resetForm() {
     this.setState({
-        name: "",
-        description: "",
-        ingredients: "",
-        id: guid(),
-        active: false
-    });
-    this.props.toggle();
+      name: "",
+      description: "",
+      ingredients: "",
+      id: guid(),
+      active: false
+    });  
   }
 
   render() {
