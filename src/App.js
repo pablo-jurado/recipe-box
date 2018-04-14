@@ -2,21 +2,41 @@ import React from 'react';
 import _ from 'lodash';
 import './App.css';
 
+function guid() {
+  function s4() {
+    return Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1);
+  }
+  return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+}
 
 class App extends React.Component {
   constructor() {
     super();
 
     this.state = {
-      editor: false
+      editor: false,
+      recipes: {}
     };
 
     this.toggleEditor = this.toggleEditor.bind(this);
+    this.addRecipe = this.addRecipe.bind(this);
   }
 
   toggleEditor() {
     this.setState({ editor: !this.state.editor });  
   }
+
+  addRecipe(recipe) {
+    var newRecipes = this.state.recipes;
+    newRecipes[recipe.id] = recipe;
+    this.setState( { recipes: newRecipes } );
+
+    console.log(this.state);
+
+  }
+
 
   render() {
     console.log("render", this.state);
@@ -25,8 +45,8 @@ class App extends React.Component {
         <h2 className="jumbotron text-center link"
           onClick={ () => { } }>Recipe Box App</h2>
         <div className="wrapper">
-          <Editor editor={ this.state.editor } toggle={ this.toggleEditor } />
-          {/* {AllRecipes(state)} */}
+          <Editor editor={ this.state.editor } toggle={ this.toggleEditor } submit={ this.addRecipe } />
+          <AllRecipes editor={ this.state.editor } recipes={ this.state.recipes } />
         </div>
       </div>
     );
@@ -38,9 +58,11 @@ class Editor extends React.Component {
     super(props);
 
     this.state = {
-      "name": "",
-      "description": "",
-      "ingredients": "",
+      name: "",
+      description: "",
+      ingredients: "",
+      id: guid(),
+      active: false
     };
 
     this.handleInput = this.handleInput.bind(this);
@@ -53,7 +75,8 @@ class Editor extends React.Component {
   
   saveRecipe(e) {
     e.preventDefault();
-    console.log(this.state);
+    this.props.submit(this.state);
+    this.props.toggle();
   }
 
   render() {
@@ -113,23 +136,25 @@ function ButtonEditor(props) {
   );
 }
 
-function AllRecipes(state) {
-  if (!state.editor.active) {
-    var allRecipes = _.map(state.recipes, function(item) {
-        if (item.active) {
-          return RecipeOpened(item)
-        } else {
-          return RecipeClosed(item)
-        }
-    });
-
-    return (
-      <div>
-        <p className="text-center">Total Recipes: {allRecipes.length}</p>
-        {allRecipes}
-      </div>
-    )
+function AllRecipes(props) {
+  if (props.editor) {
+    return null;
   }
+
+  var allRecipes = _.map(props.recipes, function(item) {
+      if (item.active) {
+        return RecipeOpened(item)
+      } else {
+        return RecipeClosed(item)
+      }
+  });
+
+  return (
+    <div>
+      <p className="text-center">Total Recipes: {allRecipes.length}</p>
+      {allRecipes}
+    </div>
+  )
 };
 
 function RecipeOpened(recipe) {
