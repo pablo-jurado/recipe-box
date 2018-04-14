@@ -30,6 +30,7 @@ class App extends React.Component {
     this.toggleEditor = this.toggleEditor.bind(this);
     this.addRecipe = this.addRecipe.bind(this);
     this.toggleRecipe = this.toggleRecipe.bind(this);
+    this.deleteRecipe = this.deleteRecipe.bind(this);
   }
 
   toggleEditor() {
@@ -41,8 +42,6 @@ class App extends React.Component {
     newState.editor = false;
     newState.recipes[recipe.id] = recipe;
     this.setState( newState );
-
-    localStorage.setItem("appState", JSON.stringify(this.state));
   }
 
   toggleRecipe(id) {
@@ -51,14 +50,25 @@ class App extends React.Component {
     this.setState({ recipes: newRecipes });  
   }
 
+  deleteRecipe(id) {
+    var newRecipes = this.state.recipes;
+    delete newRecipes[id];
+    this.setState({ recipes: newRecipes });
+  }
+
   render() {
+    localStorage.setItem("appState", JSON.stringify(this.state));
     return (
       <div className="app">
         <h2 className="jumbotron text-center link"
           onClick={ () => { } }>Recipe Box App</h2>
         <div className="wrapper">
           <Editor editor={ this.state.editor } toggle={ this.toggleEditor } submit={ this.addRecipe } />
-          <AllRecipes editor={ this.state.editor } recipes={ this.state.recipes } toggle={ this.toggleRecipe } />
+          <AllRecipes 
+            editor={ this.state.editor }
+            recipes={ this.state.recipes } 
+            toggle={ this.toggleRecipe } 
+            deleteRecipe={ this.deleteRecipe }/>
         </div>
       </div>
     );
@@ -172,7 +182,7 @@ function AllRecipes(props) {
 
   var allRecipes = _.map(props.recipes, function(item) {
       if (item.active) {
-        return RecipeOpened(item, props.toggle)
+        return RecipeOpened(item, props.toggle, props.deleteRecipe)
       } else {
         return RecipeClosed(item, props.toggle)
       }
@@ -186,7 +196,7 @@ function AllRecipes(props) {
   )
 };
 
-function RecipeOpened(recipe, toggle) {
+function RecipeOpened(recipe, toggle, deleteRecipe) {
   var ingredientsArr = recipe.ingredients.trim().split(",").filter(item => item !== "");
   var ingredients = ingredientsArr.map((item, idx) => <li key={idx}> { item }</li>);
   return (
@@ -201,7 +211,7 @@ function RecipeOpened(recipe, toggle) {
         <ul>{ ingredients }</ul>
         <div className="buttons-group float-right">
           <button onClick={ () => { console.log("TODO!!!"); } } type="button" className="btn btn-outline-primary">Edit</button>
-          <button onClick={ () => { console.log("TODO!!!"); } } type="button" className="btn btn-outline-danger">Delete</button>
+          <button onClick={ () => { deleteRecipe(recipe.id) } } type="button" className="btn btn-outline-danger">Delete</button>
         </div>
       </div>
     </div>
