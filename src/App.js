@@ -22,6 +22,7 @@ class App extends React.Component {
     } else {
       this.state = {
         editor: false,
+        recipeData: null,
         recipes: {}
       };
       localStorage.setItem("appState", JSON.stringify(this.state));
@@ -31,6 +32,8 @@ class App extends React.Component {
     this.addRecipe = this.addRecipe.bind(this);
     this.toggleRecipe = this.toggleRecipe.bind(this);
     this.deleteRecipe = this.deleteRecipe.bind(this);
+    this.editRecipe = this.editRecipe.bind(this);
+    this.clearRecipeData = this.clearRecipeData.bind(this);
   }
 
   toggleEditor() {
@@ -56,22 +59,46 @@ class App extends React.Component {
     this.setState({ recipes: newRecipes });
   }
 
+  editRecipe(id) {
+    var recipe = this.state.recipes[id];
+    this.setState({ recipeData: recipe });
+    this.toggleEditor();
+  }
+
+  clearRecipeData() {
+    this.setState({ recipeData: null });
+  }
+
   render() {
     localStorage.setItem("appState", JSON.stringify(this.state));
-    return (
-      <div className="app">
-        <h2 className="jumbotron text-center link"
-          onClick={ () => { } }>Recipe Box App</h2>
-        <div className="wrapper">
-          <Editor editor={ this.state.editor } toggle={ this.toggleEditor } submit={ this.addRecipe } />
-          <AllRecipes 
-            editor={ this.state.editor }
-            recipes={ this.state.recipes } 
-            toggle={ this.toggleRecipe } 
-            deleteRecipe={ this.deleteRecipe }/>
+    if (!this.state.editor) {
+      return (
+        <div className="app">
+          <h2 className="jumbotron text-center">Recipe Box App</h2>
+          <div className="wrapper">
+            <ButtonEditor toggle={ this.toggleEditor } />
+            <AllRecipes 
+              recipes={ this.state.recipes } 
+              toggle={ this.toggleRecipe } 
+              deleteRecipe={ this.deleteRecipe }
+              editRecipe={ this.editRecipe } />
+          </div>
         </div>
-      </div>
-    );
+      );
+    } else {
+      return (
+        <div className="app">
+          <h2 className="jumbotron text-center">Recipe Box App</h2>
+          <div className="wrapper">
+            <Editor 
+              toggle={ this.toggleEditor } 
+              submit={ this.addRecipe } 
+              recipeData={ this.state.recipeData } 
+              clearRecipeData={ this.clearRecipeData } />
+          </div>
+        </div>
+      );
+    }
   }
 };
 
@@ -110,7 +137,8 @@ class Editor extends React.Component {
       ingredients: "",
       id: guid(),
       active: false
-    });  
+    });
+    this.props.clearRecipeData();
   }
 
   handleCancel() {
@@ -118,51 +146,62 @@ class Editor extends React.Component {
     this.props.toggle();
   }
 
-  render() {
-    if (!this.props.editor) {
-      return <ButtonEditor toggle={ this.props.toggle } />
-    } else {
-      return (
-        <form className="recipe-form" onSubmit={ this.saveRecipe }>
-          <div className="form-group">
-            <label htmlFor="recipe-name">Name</label>
-            <input
-              id="name"
-              className="form-control"
-              type="text"
-              required
-              value={this.state.name}
-              onChange={this.handleInput} />
-          </div>
-          <div className="form-group">
-            <label htmlFor="recipe-description">Description</label>
-            <input
-              id="description"
-              className="form-control"
-              type="text"
-              required
-              value={this.state.description}
-              onChange={this.handleInput} />
-          </div>
-          <div className="form-group">
-            <label htmlFor="recipe-ingredients">Ingredients</label>
-            <div className="input-group">
-              <input
-                id="ingredients"
-                className="form-control"
-                type="text"
-                required
-                value={this.state.ingredients}
-                onChange={this.handleInput} />
-              </div>
-          </div>
-          <div className="buttons-group float-right">
-            <button className="btn btn-danger" type="button" onClick={ this.handleCancel }>Cancel</button>
-            <input className="btn btn-primary" type="submit" value="Save" />
-          </div>
-        </form>
-      )
+  componentWillMount() {
+    var recipe = this.props.recipeData;
+    if (recipe) {
+      if (this.state.name === "") {
+        this.setState({
+          name: recipe.name,
+          description: recipe.description,
+          ingredients: recipe.ingredients,
+          id: recipe.id,
+          active: false
+        });
+      }
     }
+  }
+
+  render() {
+    return (
+      <form className="recipe-form" onSubmit={ this.saveRecipe }>
+        <div className="form-group">
+          <label htmlFor="recipe-name">Name</label>
+          <input
+            id="name"
+            className="form-control"
+            type="text"
+            required
+            value={this.state.name}
+            onChange={this.handleInput} />
+        </div>
+        <div className="form-group">
+          <label htmlFor="recipe-description">Description</label>
+          <input
+            id="description"
+            className="form-control"
+            type="text"
+            required
+            value={this.state.description}
+            onChange={this.handleInput} />
+        </div>
+        <div className="form-group">
+          <label htmlFor="recipe-ingredients">Ingredients</label>
+          <div className="input-group">
+            <input
+              id="ingredients"
+              className="form-control"
+              type="text"
+              required
+              value={this.state.ingredients}
+              onChange={this.handleInput} />
+            </div>
+        </div>
+        <div className="buttons-group float-right">
+          <button className="btn btn-danger" type="button" onClick={ this.handleCancel }>Cancel</button>
+          <input className="btn btn-primary" type="submit" value="Save" />
+        </div>
+      </form>
+    )
   }  
 };
 
@@ -176,18 +215,13 @@ function ButtonEditor(props) {
 }
 
 function AllRecipes(props) {
-  if (props.editor) {
-    return null;
-  }
-
   var allRecipes = _.map(props.recipes, function(item) {
-      if (item.active) {
-        return RecipeOpened(item, props.toggle, props.deleteRecipe)
-      } else {
-        return RecipeClosed(item, props.toggle)
-      }
+    if (item.active) {
+      return RecipeOpened(item, props.toggle, props.deleteRecipe, props.editRecipe)
+    } else {
+      return RecipeClosed(item, props.toggle)
+    }
   });
-
   return (
     <div>
       <p className="text-center">Total Recipes: {allRecipes.length}</p>
@@ -196,7 +230,7 @@ function AllRecipes(props) {
   )
 };
 
-function RecipeOpened(recipe, toggle, deleteRecipe) {
+function RecipeOpened(recipe, toggle, deleteRecipe, editRecipe) {
   var ingredientsArr = recipe.ingredients.trim().split(",").filter(item => item !== "");
   var ingredients = ingredientsArr.map((item, idx) => <li key={idx}> { item }</li>);
   return (
@@ -210,7 +244,7 @@ function RecipeOpened(recipe, toggle, deleteRecipe) {
         <p><strong>Ingredients:</strong></p>
         <ul>{ ingredients }</ul>
         <div className="buttons-group float-right">
-          <button onClick={ () => { console.log("TODO!!!"); } } type="button" className="btn btn-outline-primary">Edit</button>
+          <button onClick={ () => { editRecipe(recipe.id) } } type="button" className="btn btn-outline-primary">Edit</button>
           <button onClick={ () => { deleteRecipe(recipe.id) } } type="button" className="btn btn-outline-danger">Delete</button>
         </div>
       </div>
