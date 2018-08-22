@@ -1,5 +1,5 @@
 import React from "react";
-import updateState from "./updateState";
+import updateState from "./actions";
 
 function Recipe(item) {
   if (item.active) {
