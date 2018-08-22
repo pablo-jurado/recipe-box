@@ -1,30 +1,51 @@
-import React from 'react';
-import updateState from './updateState';
+import React from "react";
+import updateState from "./updateState";
 
 function Recipe(item) {
-  if(item.active) {
+  if (item.active) {
     return RecipeOpened(item);
   } else {
-      return RecipeClosed(item)
+    return RecipeClosed(item);
   }
 }
 
 function RecipeOpened(recipe) {
-  var ingredientsArr = recipe.ingredients.trim().split(",").filter(item => item !== "");
-  var ingredients = ingredientsArr.map((item, idx) => <li key={idx}> { item }</li>);
+  var ingredientsArr = recipe.ingredients
+    .trim()
+    .split(",")
+    .filter(item => item !== "");
+  var ingredients = ingredientsArr.map((item, idx) => (
+    <li key={idx}> {item}</li>
+  ));
   return (
     <div className="card" key={recipe.id}>
-      <div className="card-header"
-        onClick={ () => updateState('tab_close', recipe)}>
+      <div
+        className="card-header"
+        onClick={() => updateState("tab_close", recipe)}
+      >
         {recipe.name}
       </div>
       <div className="card-body">
         <p className="card-text">{recipe.description}</p>
-        <p><strong>Ingredients:</strong></p>
-        <ul>{ ingredients }</ul>
+        <p>
+          <strong>Ingredients:</strong>
+        </p>
+        <ul>{ingredients}</ul>
         <div className="buttons-group float-right">
-          <button onClick={ () => updateState("edit_recipe", recipe) } type="button" className="btn btn-outline-primary">Edit</button>
-          <button onClick={ () => updateState("delete_recipe", recipe) } type="button" className="btn btn-outline-danger">Delete</button>
+          <button
+            onClick={() => updateState("edit_recipe", recipe)}
+            type="button"
+            className="btn btn-outline-primary"
+          >
+            Edit
+          </button>
+          <button
+            onClick={() => updateState("delete_recipe", recipe)}
+            type="button"
+            className="btn btn-outline-danger"
+          >
+            Delete
+          </button>
         </div>
       </div>
     </div>
@@ -33,9 +54,11 @@ function RecipeOpened(recipe) {
 
 function RecipeClosed(recipe) {
   return (
-    <div key={recipe.id}
+    <div
+      key={recipe.id}
       className="list-group-item"
-      onClick={ () => updateState('tab_active', recipe)}>
+      onClick={() => updateState("tab_active", recipe)}
+    >
       {recipe.name}
     </div>
   );

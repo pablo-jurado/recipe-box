@@ -1,5 +1,5 @@
-import React from 'react';
-import updateState from './updateState';
+import React from "react";
+import updateState from "./updateState";
 
 function handleName(e) {
   updateState("update_name", e.target.value);
@@ -18,7 +18,6 @@ function saveRecipe(e) {
   updateState("save_recipe");
 }
 
-
 function Editor(props) {
   return (
     <form className="recipe-form" onSubmit={saveRecipe}>
@@ -30,7 +29,8 @@ function Editor(props) {
           type="text"
           required
           value={props.editor.name}
-          onChange={handleName} />
+          onChange={handleName}
+        />
       </div>
       <div className="form-group">
         <label htmlFor="recipe-description">Description</label>
@@ -40,7 +40,8 @@ function Editor(props) {
           type="text"
           required
           value={props.editor.description}
-          onChange={handleDescription} />
+          onChange={handleDescription}
+        />
       </div>
       <div className="form-group">
         <label htmlFor="recipe-ingredients">Ingredients</label>
@@ -51,16 +52,22 @@ function Editor(props) {
             type="text"
             required
             value={props.editor.ingredients}
-            onChange={handleIngredients} />
-          </div>
+            onChange={handleIngredients}
+          />
+        </div>
       </div>
       <div className="buttons-group float-right">
-        <button className="btn btn-danger" type="button" onClick={ () => updateState("close_editor") }>Cancel</button>
+        <button
+          className="btn btn-danger"
+          type="button"
+          onClick={() => updateState("close_editor")}
+        >
+          Cancel
+        </button>
         <input className="btn btn-primary" type="submit" value="Save" />
       </div>
     </form>
-  )
-};
-
+  );
+}
 
 export default Editor;

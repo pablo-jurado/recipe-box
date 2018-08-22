@@ -1,3 +1,5 @@
+/* global localStorage */
+
 var appState = JSON.parse(localStorage.getItem("appState"));
 
 if (!appState) {
@@ -8,7 +10,7 @@ if (!appState) {
       active: false,
       name: "",
       description: "",
-      ingredients: "",
+      ingredients: ""
     },
     recipes: {}
   };
