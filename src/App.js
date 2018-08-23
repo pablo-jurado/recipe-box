@@ -1,36 +1,49 @@
 import React from "react";
-import Editor from "./Editor";
-import "./App.css";
+import Editor from "./components/Editor";
+import RecipeList from "./components/RecipeList";
+import { connect } from "react-redux";
+import { openEditor } from "./actions";
+import "./css/App.css";
 
-// function ToggleButton() {
-//   return (
-//     <button
-//       className="btn btn-primary"
-//       onClick={() => updateState("open_editor")}
-//     >
-//       Add Recipe
-//     </button>
-//   );
-// }
-
-function App() {
-  return (
-    <div className="app">
-      <h2 className="jumbotron text-center link">Recipe Box App</h2>
-      <Editor />
-
-      {/* <div className="wrapper">
-        {state.editor.active ? (
-          <Editor editor={state.editor} />
-        ) : (
-          <div>
-            <ToggleButton />
-            <RecipeList recipes={state.recipes} />
-          </div>
-        )}
-      </div> */}
-    </div>
-  );
+class App extends React.Component {
+  render() {
+    console.log("props", this.props);
+    return (
+      <div className="app">
+        <h2 className="jumbotron text-center link">Recipe Box App</h2>
+        <div className="wrapper">
+          {this.props.editor ? (
+            <Editor />
+          ) : (
+            <div>
+              <button
+                className="btn btn-primary"
+                onClick={() => this.props.openEditor()}
+              >
+                Add Recipe
+              </button>
+              <RecipeList />
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
 }
 
-export default App;
+const mapStateToProps = (state, ownProps) => {
+  // console.log("from app ownProps", ownProps);
+  return {
+    editor: state.editor,
+    recipes: state.recipes
+  };
+};
+
+const mapDispatchToProps = dispatch => ({
+  openEditor: () => dispatch(openEditor())
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App);

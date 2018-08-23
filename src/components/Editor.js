@@ -1,4 +1,6 @@
 import React from "react";
+import { connect } from "react-redux";
+import { closeEditor } from "../actions";
 
 class Editor extends React.Component {
   constructor(props) {
@@ -50,6 +52,7 @@ class Editor extends React.Component {
 
   handleCancel() {
     this.resetForm();
+    this.props.closeEditor();
   }
 
   componentWillMount() {
@@ -120,4 +123,13 @@ class Editor extends React.Component {
   }
 }
 
-export default Editor;
+// react-redux
+
+const mapDispatchToProps = dispatch => ({
+  closeEditor: () => dispatch(closeEditor())
+});
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(Editor);
