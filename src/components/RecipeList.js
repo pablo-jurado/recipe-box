@@ -1,6 +1,7 @@
 import React from "react";
 import _ from "lodash";
 import Recipe from "./Recipe";
+import { connect } from "react-redux";
 
 function RecipeList(props) {
   var list = _.map(props.recipes, function(item) {
@@ -15,4 +16,10 @@ function RecipeList(props) {
   );
 }
 
-export default RecipeList;
+const mapStateToProps = state => {
+  return {
+    recipes: state.recipes
+  };
+};
+
+export default connect(mapStateToProps)(RecipeList);

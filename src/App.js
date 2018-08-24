@@ -7,7 +7,6 @@ import "./css/App.css";
 
 class App extends React.Component {
   render() {
-    console.log("props", this.props);
     return (
       <div className="app">
         <h2 className="jumbotron text-center link">Recipe Box App</h2>
@@ -32,7 +31,6 @@ class App extends React.Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  // console.log("from app ownProps", ownProps);
   return {
     editor: state.editor,
     recipes: state.recipes

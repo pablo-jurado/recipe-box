@@ -19,3 +19,10 @@ export const openEditor = () => {
     type: OPEN_EDITOR
   };
 };
+
+export const addRecipe = recipe => {
+  return {
+    type: ADD_RECIPE,
+    payload: recipe
+  };
+};

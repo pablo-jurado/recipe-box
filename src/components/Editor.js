@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { closeEditor } from "../actions";
+import { closeEditor, addRecipe } from "../actions";
 
 class Editor extends React.Component {
   constructor(props) {
@@ -27,8 +27,9 @@ class Editor extends React.Component {
 
   saveRecipe(e) {
     e.preventDefault();
-    console.log(this.state);
+    this.props.addRecipe(this.state);
     this.resetForm();
+    this.props.closeEditor();
   }
 
   guid() {
@@ -126,7 +127,8 @@ class Editor extends React.Component {
 // react-redux
 
 const mapDispatchToProps = dispatch => ({
-  closeEditor: () => dispatch(closeEditor())
+  closeEditor: () => dispatch(closeEditor()),
+  addRecipe: recipe => dispatch(addRecipe(recipe))
 });
 
 export default connect(

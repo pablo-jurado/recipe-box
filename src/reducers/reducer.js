@@ -1,22 +1,25 @@
-import { OPEN_EDITOR, CLOSE_EDITOR } from "../actions";
+import { OPEN_EDITOR, CLOSE_EDITOR, ADD_RECIPE } from "../actions";
 
 const defaultState = {
-  editor: true,
-  recipes: {}
+  editor: false,
+  recipes: []
 };
 
 const rootReducer = (state = defaultState, action) => {
   if (action.type === OPEN_EDITOR) {
-    let newState = Object.assign({}, state);
-    newState.editor = true;
-    return newState;
+    return Object.assign({}, state, { editor: true });
   }
 
   if (action.type === CLOSE_EDITOR) {
+    return Object.assign({}, state, { editor: false });
+  }
+
+  if (action.type === ADD_RECIPE) {
     let newState = Object.assign({}, state);
-    newState.editor = false;
+    newState.recipes.push(action.payload);
     return newState;
   }
+
   return state;
 };
 
