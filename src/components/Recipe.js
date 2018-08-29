@@ -4,15 +4,15 @@ function updateState(x, y) {
   console.log(x, y);
 }
 
-function Recipe(item) {
+function Recipe(item, toggleRecipe) {
   if (item.active) {
-    return RecipeOpened(item);
+    return RecipeOpened(item, toggleRecipe);
   } else {
-    return RecipeClosed(item);
+    return RecipeClosed(item, toggleRecipe);
   }
 }
 
-function RecipeOpened(recipe) {
+function RecipeOpened(recipe, toggleRecipe) {
   var ingredientsArr = recipe.ingredients
     .trim()
     .split(",")
@@ -22,10 +22,7 @@ function RecipeOpened(recipe) {
   ));
   return (
     <div className="card" key={recipe.id}>
-      <div
-        className="card-header"
-        onClick={() => updateState("tab_close", recipe)}
-      >
+      <div className="card-header" onClick={() => toggleRecipe(recipe.id)}>
         {recipe.name}
       </div>
       <div className="card-body">
@@ -55,12 +52,12 @@ function RecipeOpened(recipe) {
   );
 }
 
-function RecipeClosed(recipe) {
+function RecipeClosed(recipe, toggleRecipe) {
   return (
     <div
       key={recipe.id}
       className="list-group-item"
-      onClick={() => updateState("tab_active", recipe)}
+      onClick={() => toggleRecipe(recipe.id)}
     >
       {recipe.name}
     </div>

@@ -1,11 +1,11 @@
 import React from "react";
-import _ from "lodash";
 import Recipe from "./Recipe";
 import { connect } from "react-redux";
+import { toggleRecipe } from "../actions";
 
 function RecipeList(props) {
-  var list = _.map(props.recipes, function(item) {
-    return Recipe(item);
+  var list = props.recipes.map(function(item) {
+    return Recipe(item, props.toggleRecipe);
   });
 
   return (
@@ -22,4 +22,13 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(RecipeList);
+const mapDispatcjToProps = dispatch => {
+  return {
+    toggleRecipe: id => dispatch(toggleRecipe(id))
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatcjToProps
+)(RecipeList);
