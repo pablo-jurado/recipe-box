@@ -2,7 +2,8 @@ import {
   OPEN_EDITOR,
   CLOSE_EDITOR,
   ADD_RECIPE,
-  TOGGLE_RECIPE
+  TOGGLE_RECIPE,
+  DELETE_RECIPE
 } from "../actions";
 
 const defaultState = {
@@ -49,7 +50,7 @@ const rootReducer = (state = defaultState, action) => {
 
   if (action.type === TOGGLE_RECIPE) {
     const newRecipes = state.recipes.map(recipe => {
-      if (recipe.id === action.id) {
+      if (recipe.id === action.payload) {
         recipe.active = !recipe.active;
       } else {
         recipe.active = false;
@@ -57,6 +58,13 @@ const rootReducer = (state = defaultState, action) => {
       return recipe;
     });
     return Object.assign({}, state, { recipes: newRecipes });
+  }
+
+  if (action.type === DELETE_RECIPE) {
+    var filterArray = state.recipes.filter(recipe => {
+      return recipe.id !== action.payload;
+    });
+    return Object.assign({}, state, { recipes: filterArray });
   }
 
   return state;

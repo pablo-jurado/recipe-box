@@ -4,15 +4,15 @@ function updateState(x, y) {
   console.log(x, y);
 }
 
-function Recipe(item, toggleRecipe) {
+function Recipe(item, toggleRecipe, deleteRecipe) {
   if (item.active) {
-    return RecipeOpened(item, toggleRecipe);
+    return RecipeOpened(item, toggleRecipe, deleteRecipe);
   } else {
     return RecipeClosed(item, toggleRecipe);
   }
 }
 
-function RecipeOpened(recipe, toggleRecipe) {
+function RecipeOpened(recipe, toggleRecipe, deleteRecipe) {
   var ingredientsArr = recipe.ingredients
     .trim()
     .split(",")
@@ -21,7 +21,7 @@ function RecipeOpened(recipe, toggleRecipe) {
     <li key={idx}> {item}</li>
   ));
   return (
-    <div className="card" key={recipe.id}>
+    <div className="card" key={recipe.name}>
       <div className="card-header" onClick={() => toggleRecipe(recipe.id)}>
         {recipe.name}
       </div>
@@ -40,7 +40,7 @@ function RecipeOpened(recipe, toggleRecipe) {
             Edit
           </button>
           <button
-            onClick={() => updateState("delete_recipe", recipe)}
+            onClick={() => deleteRecipe(recipe.id)}
             type="button"
             className="btn btn-outline-danger"
           >
@@ -55,7 +55,7 @@ function RecipeOpened(recipe, toggleRecipe) {
 function RecipeClosed(recipe, toggleRecipe) {
   return (
     <div
-      key={recipe.id}
+      key={recipe.name}
       className="list-group-item"
       onClick={() => toggleRecipe(recipe.id)}
     >
