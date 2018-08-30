@@ -41,6 +41,7 @@ const mapDispatchToProps = dispatch => ({
   openEditor: () => dispatch(openEditor())
 });
 
+
 export default connect(
   mapStateToProps,
   mapDispatchToProps
