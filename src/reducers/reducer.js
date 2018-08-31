@@ -3,28 +3,32 @@ import {
   CLOSE_EDITOR,
   ADD_RECIPE,
   TOGGLE_RECIPE,
-  DELETE_RECIPE
+  DELETE_RECIPE,
+  EDIT_RECIPE
 } from "../actions";
 
 const defaultState = {
   editor: false,
   recipes: [
     {
-      active: false,
+      open: false,
+      edit: false,
       description: "adsf",
       id: "2f36de09-8d03-6452-af31-ccf49245",
       ingredients: "1, 2, 3",
       name: "pizza"
     },
     {
-      active: false,
+      open: false,
+      edit: false,
       description: "adsf",
       id: "2f36de09-8d03-6452-af31-ccf49246",
       ingredients: "1, 2, 3",
       name: "pasta"
     },
     {
-      active: false,
+      open: false,
+      edit: false,
       description: "adsf",
       id: "2f36de09-8d03-6452-af31-ccf49247",
       ingredients: "1, 2, 3",
@@ -51,9 +55,9 @@ const rootReducer = (state = defaultState, action) => {
   if (action.type === TOGGLE_RECIPE) {
     const newRecipes = state.recipes.map(recipe => {
       if (recipe.id === action.payload) {
-        recipe.active = !recipe.active;
+        recipe.open = !recipe.open;
       } else {
-        recipe.active = false;
+        recipe.open = false;
       }
       return recipe;
     });
@@ -67,6 +71,18 @@ const rootReducer = (state = defaultState, action) => {
     return Object.assign({}, state, { recipes: filterArray });
   }
 
+  if (action.type === EDIT_RECIPE) {
+    console.log(EDIT_RECIPE);
+    console.log(action.payload);
+
+    const updatedRecipes = state.recipes.map(recipe => {
+      if (recipe.id === action.payload) {
+        recipe.edit = true;
+      }
+      return recipe;
+    });
+    return Object.assign({}, state, { recipes: updatedRecipes });
+  }
   return state;
 };
 

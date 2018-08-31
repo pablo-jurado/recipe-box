@@ -1,18 +1,16 @@
 import React from "react";
 
-function updateState(x, y) {
-  console.log(x, y);
-}
-
-function Recipe(item, toggleRecipe, deleteRecipe) {
-  if (item.active) {
-    return RecipeOpened(item, toggleRecipe, deleteRecipe);
+function Recipe(item, toggleRecipe, deleteRecipe, editRecipe) {
+  if (item.edit) {
+    return RecipeEdit(item, toggleRecipe);
+  } else if (item.open) {
+    return RecipeOpened(item, toggleRecipe, deleteRecipe, editRecipe);
   } else {
     return RecipeClosed(item, toggleRecipe);
   }
 }
 
-function RecipeOpened(recipe, toggleRecipe, deleteRecipe) {
+function RecipeOpened(recipe, toggleRecipe, deleteRecipe, editRecipe) {
   var ingredientsArr = recipe.ingredients
     .trim()
     .split(",")
@@ -33,7 +31,7 @@ function RecipeOpened(recipe, toggleRecipe, deleteRecipe) {
         <ul>{ingredients}</ul>
         <div className="buttons-group float-right">
           <button
-            onClick={() => updateState("edit_recipe", recipe)}
+            onClick={() => editRecipe(recipe.id)}
             type="button"
             className="btn btn-outline-primary"
           >
@@ -48,6 +46,18 @@ function RecipeOpened(recipe, toggleRecipe, deleteRecipe) {
           </button>
         </div>
       </div>
+    </div>
+  );
+}
+
+function RecipeEdit(recipe, toggleRecipe, deleteRecipe) {
+  console.log(recipe);
+  return (
+    <div className="card" key={recipe.name}>
+      <div className="card-header" onClick={() => toggleRecipe(recipe.id)}>
+        {recipe.name}
+      </div>
+      <div className="card-body">TODO</div>
     </div>
   );
 }

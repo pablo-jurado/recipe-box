@@ -11,7 +11,8 @@ class Editor extends React.Component {
       description: "",
       ingredients: "",
       id: this.guid(),
-      active: false
+      edit: false,
+      open: false
     };
 
     this.handleInput = this.handleInput.bind(this);
@@ -47,7 +48,8 @@ class Editor extends React.Component {
       description: "",
       ingredients: "",
       id: this.guid(),
-      active: false
+      edit: false,
+      open: false
     });
   }
 
@@ -65,7 +67,8 @@ class Editor extends React.Component {
           description: recipe.description,
           ingredients: recipe.ingredients,
           id: recipe.id,
-          active: false
+          edit: false,
+          open: false
         });
       }
     }

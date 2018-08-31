@@ -40,3 +40,10 @@ export const deleteRecipe = id => {
     payload: id
   };
 };
+
+export const editRecipe = id => {
+  return {
+    type: EDIT_RECIPE,
+    payload: id
+  };
+};
