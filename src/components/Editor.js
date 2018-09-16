@@ -6,14 +6,23 @@ class Editor extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      name: "",
-      description: "",
-      ingredients: "",
-      id: this.guid(),
-      edit: false,
-      open: false
-    };
+    if (!props.editRecipe) {
+      this.state = {
+        name: "",
+        description: "",
+        ingredients: "",
+        id: this.guid(),
+        open: false
+      };
+    } else {
+      this.state = {
+        name: props.editRecipe.name,
+        description: props.editRecipe.description,
+        ingredients: props.editRecipe.ingredients,
+        id: props.editRecipe.id,
+        open: false
+      };
+    }
 
     this.handleInput = this.handleInput.bind(this);
     this.saveRecipe = this.saveRecipe.bind(this);
@@ -128,6 +137,11 @@ class Editor extends React.Component {
 }
 
 // react-redux
+const mapStateToProps = state => {
+  return {
+    editRecipe: state.editorRecipe
+  };
+};
 
 const mapDispatchToProps = dispatch => ({
   closeEditor: () => dispatch(closeEditor()),
@@ -135,6 +149,6 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(Editor);

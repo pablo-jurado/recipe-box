@@ -14,9 +14,10 @@ export const closeEditor = () => {
   };
 };
 
-export const openEditor = () => {
+export const openEditor = recipe => {
   return {
-    type: OPEN_EDITOR
+    type: OPEN_EDITOR,
+    payload: recipe
   };
 };
 
@@ -37,13 +38,6 @@ export const addRecipe = recipe => {
 export const deleteRecipe = id => {
   return {
     type: DELETE_RECIPE,
-    payload: id
-  };
-};
-
-export const editRecipe = id => {
-  return {
-    type: EDIT_RECIPE,
     payload: id
   };
 };

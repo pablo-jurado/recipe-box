@@ -1,16 +1,14 @@
 import React from "react";
 
-function Recipe(item, toggleRecipe, deleteRecipe, editRecipe) {
-  if (item.edit) {
-    return RecipeEdit(item, toggleRecipe);
-  } else if (item.open) {
-    return RecipeOpened(item, toggleRecipe, deleteRecipe, editRecipe);
+function Recipe(item, toggleRecipe, deleteRecipe, openEditor) {
+  if (item.open) {
+    return RecipeOpened(item, toggleRecipe, deleteRecipe, openEditor);
   } else {
     return RecipeClosed(item, toggleRecipe);
   }
 }
 
-function RecipeOpened(recipe, toggleRecipe, deleteRecipe, editRecipe) {
+function RecipeOpened(recipe, toggleRecipe, deleteRecipe, openEditor) {
   var ingredientsArr = recipe.ingredients
     .trim()
     .split(",")
@@ -31,7 +29,7 @@ function RecipeOpened(recipe, toggleRecipe, deleteRecipe, editRecipe) {
         <ul>{ingredients}</ul>
         <div className="buttons-group float-right">
           <button
-            onClick={() => editRecipe(recipe.id)}
+            onClick={() => openEditor(recipe)}
             type="button"
             className="btn btn-outline-primary"
           >
@@ -46,18 +44,6 @@ function RecipeOpened(recipe, toggleRecipe, deleteRecipe, editRecipe) {
           </button>
         </div>
       </div>
-    </div>
-  );
-}
-
-function RecipeEdit(recipe, toggleRecipe, deleteRecipe) {
-  console.log(recipe);
-  return (
-    <div className="card" key={recipe.name}>
-      <div className="card-header" onClick={() => toggleRecipe(recipe.id)}>
-        {recipe.name}
-      </div>
-      <div className="card-body">TODO</div>
     </div>
   );
 }

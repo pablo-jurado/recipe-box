@@ -1,7 +1,7 @@
 import React from "react";
 import Recipe from "./Recipe";
 import { connect } from "react-redux";
-import { toggleRecipe, deleteRecipe, editRecipe } from "../actions";
+import { toggleRecipe, deleteRecipe, openEditor } from "../actions";
 
 function RecipeList(props) {
   var list = props.recipes.map(function(item) {
@@ -9,7 +9,7 @@ function RecipeList(props) {
       item,
       props.toggleRecipe,
       props.deleteRecipe,
-      props.editRecipe
+      props.openEditor
     );
   });
 
@@ -31,7 +31,7 @@ const mapDispatcjToProps = dispatch => {
   return {
     toggleRecipe: id => dispatch(toggleRecipe(id)),
     deleteRecipe: id => dispatch(deleteRecipe(id)),
-    editRecipe: id => dispatch(editRecipe(id))
+    openEditor: recipe => dispatch(openEditor(recipe))
   };
 };
 

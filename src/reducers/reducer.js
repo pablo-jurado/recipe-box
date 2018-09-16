@@ -3,16 +3,15 @@ import {
   CLOSE_EDITOR,
   ADD_RECIPE,
   TOGGLE_RECIPE,
-  DELETE_RECIPE,
-  EDIT_RECIPE
+  DELETE_RECIPE
 } from "../actions";
 
 const defaultState = {
   editor: false,
+  editorRecipe: null,
   recipes: [
     {
       open: false,
-      edit: false,
       description: "adsf",
       id: "2f36de09-8d03-6452-af31-ccf49245",
       ingredients: "1, 2, 3",
@@ -20,7 +19,6 @@ const defaultState = {
     },
     {
       open: false,
-      edit: false,
       description: "adsf",
       id: "2f36de09-8d03-6452-af31-ccf49246",
       ingredients: "1, 2, 3",
@@ -28,7 +26,6 @@ const defaultState = {
     },
     {
       open: false,
-      edit: false,
       description: "adsf",
       id: "2f36de09-8d03-6452-af31-ccf49247",
       ingredients: "1, 2, 3",
@@ -39,7 +36,10 @@ const defaultState = {
 
 const rootReducer = (state = defaultState, action) => {
   if (action.type === OPEN_EDITOR) {
-    return Object.assign({}, state, { editor: true });
+    return Object.assign({}, state, {
+      editor: true,
+      editorRecipe: action.payload
+    });
   }
 
   if (action.type === CLOSE_EDITOR) {
@@ -71,18 +71,6 @@ const rootReducer = (state = defaultState, action) => {
     return Object.assign({}, state, { recipes: filterArray });
   }
 
-  if (action.type === EDIT_RECIPE) {
-    console.log(EDIT_RECIPE);
-    console.log(action.payload);
-
-    const updatedRecipes = state.recipes.map(recipe => {
-      if (recipe.id === action.payload) {
-        recipe.edit = true;
-      }
-      return recipe;
-    });
-    return Object.assign({}, state, { recipes: updatedRecipes });
-  }
   return state;
 };
 
