@@ -7,13 +7,7 @@ class Editor extends React.Component {
     super(props);
 
     if (!props.editRecipe) {
-      this.state = {
-        name: "",
-        description: "",
-        ingredients: "",
-        id: this.guid(),
-        open: false
-      };
+      this.state = this.getDefaultState();
     } else {
       this.state = {
         name: props.editRecipe.name,
@@ -29,6 +23,7 @@ class Editor extends React.Component {
     this.resetForm = this.resetForm.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
     this.guid = this.guid.bind(this);
+    this.getDefaultState = this.getDefaultState.bind(this);
   }
 
   handleInput(e) {
@@ -51,15 +46,19 @@ class Editor extends React.Component {
     return `${s4() + s4()}-${s4()}-${s4()}-${s4()}-${s4() + s4()}`;
   }
 
-  resetForm() {
-    this.setState({
+  getDefaultState() {
+    return {
       name: "",
       description: "",
       ingredients: "",
       id: this.guid(),
       edit: false,
       open: false
-    });
+    };
+  }
+
+  resetForm() {
+    this.setState(this.getDefaultState());
   }
 
   handleCancel() {
