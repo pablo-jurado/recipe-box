@@ -1,3 +1,4 @@
+/* global localStorage */
 import {
   OPEN_EDITOR,
   CLOSE_EDITOR,
@@ -6,34 +7,6 @@ import {
   DELETE_RECIPE,
   UPDATE_RECIPE
 } from "../actions";
-
-const defaultState = {
-  editor: false,
-  editorRecipe: null,
-  recipes: [
-    {
-      open: false,
-      description: "adsf",
-      id: "2f36de09-8d03-6452-af31-ccf49245",
-      ingredients: "1, 2, 3",
-      name: "pizza"
-    },
-    {
-      open: false,
-      description: "adsf",
-      id: "2f36de09-8d03-6452-af31-ccf49246",
-      ingredients: "1, 2, 3",
-      name: "pasta"
-    },
-    {
-      open: false,
-      description: "adsf",
-      id: "2f36de09-8d03-6452-af31-ccf49247",
-      ingredients: "1, 2, 3",
-      name: "Chicken parm"
-    }
-  ]
-};
 
 const rootReducer = (state = defaultState, action) => {
   if (action.type === OPEN_EDITOR) {
@@ -85,7 +58,18 @@ const rootReducer = (state = defaultState, action) => {
   return state;
 };
 
-export default rootReducer;
+let defaultState = {
+  editor: false,
+  editorRecipe: null,
+  recipes: []
+};
 
-// localStorage.setItem("appState", JSON.stringify(appState));
-// var appState = JSON.parse(localStorage.getItem("appState"));
+let appState = JSON.parse(localStorage.getItem("appState"));
+
+if (appState) {
+  defaultState = appState;
+}
+
+localStorage.setItem("appState", JSON.stringify(defaultState));
+
+export default rootReducer;

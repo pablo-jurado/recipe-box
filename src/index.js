@@ -1,3 +1,4 @@
+/* global localStorage */
 import React from "react";
 import ReactDOM from "react-dom";
 import "./css/index.css";
@@ -10,7 +11,7 @@ import rootReducer from "./reducers/reducer";
 const store = createStore(rootReducer);
 
 store.subscribe(() => {
-  // console.log(store.getState());
+  localStorage.setItem("appState", JSON.stringify(store.getState()));
 });
 
 const root = document.getElementById("root");
