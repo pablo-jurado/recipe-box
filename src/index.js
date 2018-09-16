@@ -10,7 +10,7 @@ import rootReducer from "./reducers/reducer";
 const store = createStore(rootReducer);
 
 store.subscribe(() => {
-  console.log(store.getState());
+  // console.log(store.getState());
 });
 
 const root = document.getElementById("root");

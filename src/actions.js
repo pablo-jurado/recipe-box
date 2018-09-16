@@ -4,7 +4,7 @@ export const CLOSE_EDITOR = "CLOSE_EDITOR";
 export const ADD_RECIPE = "ADD_RECIPE";
 export const TOGGLE_RECIPE = "TOGGLE_RECIPE";
 export const CLOSE_RECIPE = "CLOSE_RECIPE";
-export const EDIT_RECIPE = "EDIT_RECIPE";
+export const UPDATE_RECIPE = "UPDATE_RECIPE";
 export const DELETE_RECIPE = "DELETE_RECIPE";
 
 // action creators
@@ -31,6 +31,13 @@ export const toggleRecipe = id => {
 export const addRecipe = recipe => {
   return {
     type: ADD_RECIPE,
+    payload: recipe
+  };
+};
+
+export const updateRecipe = recipe => {
+  return {
+    type: UPDATE_RECIPE,
     payload: recipe
   };
 };

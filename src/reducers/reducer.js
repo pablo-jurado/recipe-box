@@ -3,7 +3,8 @@ import {
   CLOSE_EDITOR,
   ADD_RECIPE,
   TOGGLE_RECIPE,
-  DELETE_RECIPE
+  DELETE_RECIPE,
+  UPDATE_RECIPE
 } from "../actions";
 
 const defaultState = {
@@ -52,6 +53,16 @@ const rootReducer = (state = defaultState, action) => {
     return newState;
   }
 
+  if (action.type === UPDATE_RECIPE) {
+    const filterArray = state.recipes.map(recipe => {
+      if (recipe.id === action.payload.id) {
+        return action.payload;
+      }
+      return recipe;
+    });
+    return Object.assign({}, state, { recipes: filterArray });
+  }
+
   if (action.type === TOGGLE_RECIPE) {
     const newRecipes = state.recipes.map(recipe => {
       if (recipe.id === action.payload) {
@@ -65,7 +76,7 @@ const rootReducer = (state = defaultState, action) => {
   }
 
   if (action.type === DELETE_RECIPE) {
-    var filterArray = state.recipes.filter(recipe => {
+    const filterArray = state.recipes.filter(recipe => {
       return recipe.id !== action.payload;
     });
     return Object.assign({}, state, { recipes: filterArray });
